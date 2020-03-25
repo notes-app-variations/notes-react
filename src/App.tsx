@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import Authenticate from "./pages/authenticate"
+import Notes from "./pages/notes"
+import Note from "./pages/note"
+import { BrowserRouter as Router, Route, Link } from "react-router-dom"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <div className="App">
+        <header className="flex justify-between items-center">
+          <Link to="/notes">
+            <h1 className="page-title text-gray-900 ml-3">notes.</h1>
+          </Link>
+          <button className="btn-main mr-3">Logout</button>
+        </header>
+        <Route exact path="/" render={props => <Authenticate {...props} />} />
+        <Route exact path="/notes" render={props => <Notes {...props} />} />
+        <Route exact path="/note" render={props => <Note {...props} />} />
+        <footer className="flex justify-center">
+          <p className="m-auto text-sm font-light text-gray-500">
+            Made with Vue
+          </p>
+        </footer>
+      </div>
+    </Router>
+  )
 }
 
-export default App;
+export default App
