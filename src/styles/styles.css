@@ -10978,13 +10978,8 @@ ol {
 
 html,
 body,
-#app {
+#root {
   height: 100%;
-}
-
-#app {
-  display: flex;
-  flex-direction: column;
 }
 
 @media (min-width: 640px){
