@@ -23,7 +23,7 @@ const Authenticate = (props: Props) => {
           </li>
           <li className="w-1/2">
             <Link
-              to={`${url}/register`}
+              to={`${url}register`}
               className="bg-orange-100 w-full inline-block py-2 px-4 text-gray-500 font-semibold focus:outline-none"
             >
               Register
@@ -38,8 +38,7 @@ const Authenticate = (props: Props) => {
               render={props => <Login {...props} />}
             ></Route>
             <Route
-              exact
-              path={`${path}/register`}
+              path={`${path}register`}
               render={props => <Register {...props} />}
             ></Route>
           </Switch>
