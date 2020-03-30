@@ -81,8 +81,8 @@ const Notes = (props: Props) => {
             <span className="block sm:inline">{alert}</span>
           </div>
         )}
-        {filteredNotes().forEach(x => (
-          <div>
+        {filteredNotes().map(x => (
+          <div key={x._id}>
             <label className="text-gray-500 font-bold flex items-center">
               <input className="leading-tight" type="checkbox" />
               <span className="text-sm">Select for delete</span>
