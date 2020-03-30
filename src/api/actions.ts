@@ -1,4 +1,4 @@
-import { baseURI, GlobalVars, Note } from "./vars"
+import { baseURI, Note } from "./vars"
 
 export const fetchNotes = async () => {
   const user = JSON.parse(localStorage.getItem("user") || "")
@@ -12,7 +12,7 @@ export const fetchNotes = async () => {
   if (result.ok) {
     return await result.json()
   } else {
-    throw `Something went wrong ${await result.json()}`
+    throw Error(`Something went wrong ${await result.json()}`)
   }
 }
 
@@ -30,7 +30,7 @@ export const postNote = async (note: Note) => {
   if (result.ok) {
     return "ok"
   } else {
-    throw `Something went wrong ${await result.json()}`
+    throw Error(`Something went wrong ${await result.json()}`)
   }
 }
 
@@ -48,7 +48,7 @@ export const editNote = async (id: string, note: Note) => {
   if (result.ok) {
     return "ok"
   } else {
-    throw `Something went wrong ${await result.json()}`
+    throw Error(`Something went wrong ${await result.json()}`)
   }
 }
 
@@ -63,6 +63,6 @@ export const deleteNote = async (id: string) => {
   if (result.ok) {
     return "ok"
   } else {
-    throw `Something went wrong ${await result.json()}`
+    throw Error(`Something went wrong ${await result.json()}`)
   }
 }
