@@ -21,6 +21,7 @@ const Notes = (props: Props) => {
   const [alert, setAlert] = useState("")
   const [category, setCategory] = useState("All")
   const [notes, setNotes] = useState<Array<Note>>([])
+  const [filteredNotes, setFilteredNotes] = useState<Array<Note>>([])
   const [selectedNoteIds, setSelectedNoteIds] = useState([])
   const [userId, setUserId] = useState("")
 
@@ -28,6 +29,7 @@ const Notes = (props: Props) => {
     fetchNotes()
       .then((res) => {
         setNotes([...res])
+        setFilteredNotes([...res])
       })
       .catch((e) => {
         setAlert(e.toString())
@@ -40,9 +42,10 @@ const Notes = (props: Props) => {
     fetchData()
   }, [userId])
 
-  const filteredNotes = () => {
-    if (category === "All") return notes
-    else return notes.filter((n) => n.category === category)
+  const filterNotes = (category: string) => {
+    setCategory(category)
+    if (category === "All") setFilteredNotes(notes)
+    else setFilteredNotes(notes.filter((n) => n.category === category))
   }
 
   const bulkDelete = async (e: React.MouseEvent) => {
@@ -58,7 +61,11 @@ const Notes = (props: Props) => {
   return (
     <div className="home h-full w-4/5 lg:w-3/4 m-auto">
       <section className="flex flex-wrap justify-between mb-8 mt-8 lg:mt-16">
-        <CategorySelector />
+        <CategorySelector
+          category={category}
+          onCategoryChange={filterNotes}
+          hasOptionForAll={true}
+        />
         <button
           onClick={bulkDelete}
           className="btn-main bg-red-500 hover:bg-red-400 ml-4 md:mr-auto"
@@ -81,7 +88,7 @@ const Notes = (props: Props) => {
             <span className="block sm:inline">{alert}</span>
           </div>
         )}
-        {filteredNotes().map((x) => (
+        {filteredNotes.map((x) => (
           <div key={x._id}>
             <label className="text-gray-500 font-bold flex items-center">
               <input className="leading-tight" type="checkbox" />

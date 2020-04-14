@@ -1,4 +1,4 @@
-import React, { ReactPropTypes } from "react"
+import React from "react"
 import { useState } from "react"
 import queryString from "query-string"
 import marked from "marked"
@@ -15,7 +15,6 @@ const Note = (props: Props) => {
   const [title, setTitle] = useState(parsed.title?.toString() || "")
   const [body, setBody] = useState(parsed.body?.toString() || "")
   const [category, setCategory] = useState(parsed.category?.toString() || "")
-  const [uid, setUid] = useState(parsed.uid?.toString() || "")
   const [alert, setAlert] = useState("")
   const history = useHistory()
 
@@ -54,7 +53,7 @@ const Note = (props: Props) => {
       }
     }
   }
-  const deleteNote = (e: any) => {
+  const deleteThisNote = (e: any) => {
     e.preventDefault()
     try {
       deleteNote(_id)
@@ -62,6 +61,9 @@ const Note = (props: Props) => {
     } catch (e) {
       setAlert(e)
     }
+  }
+  const handleCategoryChange = (category: string) => {
+    setCategory(category)
   }
 
   return (
@@ -73,7 +75,11 @@ const Note = (props: Props) => {
             onChange={(e) => onEditTitle(e)}
             className=" w-3/5 mr-4"
           ></input>
-          <CategorySelector />
+          <CategorySelector
+            category={category}
+            onCategoryChange={handleCategoryChange}
+            hasOptionForAll={false}
+          />
         </div>
         <p className="text-xs italic ml-auto text-gray-500">
           TIP: You can write markdown!
@@ -92,7 +98,7 @@ const Note = (props: Props) => {
         <div className="flex my-5">
           <button
             className="btn-main bg-red-700 hover:bg-red-500"
-            onClick={(e) => deleteNote(e)}
+            onClick={(e) => deleteThisNote(e)}
           >
             Delete
           </button>
