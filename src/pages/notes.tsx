@@ -22,7 +22,7 @@ const Notes = (props: Props) => {
   const [category, setCategory] = useState("All")
   const [notes, setNotes] = useState<Array<Note>>([])
   const [filteredNotes, setFilteredNotes] = useState<Array<Note>>([])
-  const [selectedNoteIds, setSelectedNoteIds] = useState([])
+  const [selectedNoteIds, setSelectedNoteIds] = useState<Array<string>>([])
   const [userId, setUserId] = useState("")
 
   function fetchData() {
@@ -53,10 +53,17 @@ const Notes = (props: Props) => {
     try {
       setAlert("")
       await Promise.all(selectedNoteIds.map(async (x) => await deleteNote(x)))
-      //this.notes = await fetchNotes()
+      await fetchData()
     } catch (e) {
       setAlert(e)
     }
+  }
+  const handleCheckChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const item = e.target.name
+    const isChecked = e.target.checked
+    selectedNoteIds.includes(item)
+      ? setSelectedNoteIds(selectedNoteIds.filter((x) => x !== item))
+      : setSelectedNoteIds([...selectedNoteIds, item])
   }
   return (
     <div className="home h-full w-4/5 lg:w-3/4 m-auto">
@@ -91,7 +98,13 @@ const Notes = (props: Props) => {
         {filteredNotes.map((x) => (
           <div key={x._id}>
             <label className="text-gray-500 font-bold flex items-center">
-              <input className="leading-tight" type="checkbox" />
+              <input
+                name={x._id}
+                checked={selectedNoteIds.includes(x._id)}
+                onChange={handleCheckChange}
+                className="leading-tight"
+                type="checkbox"
+              />
               <span className="text-sm">Select for delete</span>
             </label>
             <Link

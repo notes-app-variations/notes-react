@@ -12,9 +12,11 @@ interface Props extends RouteComponentProps {}
 const Note = (props: Props) => {
   const parsed = queryString.parse(props.location.search)
   const [_id, setId] = useState(parsed._id?.toString() || "")
-  const [title, setTitle] = useState(parsed.title?.toString() || "")
+  const [title, setTitle] = useState(parsed.title?.toString() || "Title")
   const [body, setBody] = useState(parsed.body?.toString() || "")
-  const [category, setCategory] = useState(parsed.category?.toString() || "")
+  const [category, setCategory] = useState(
+    parsed.category?.toString() || "Work"
+  )
   const [alert, setAlert] = useState("")
   const history = useHistory()
 
