@@ -37,7 +37,7 @@ const NoteCard = (props: Props) => {
       <p
         className="note-body"
         dangerouslySetInnerHTML={{
-          __html: getBodyMarkup()
+          __html: getBodyMarkup(),
         }}
       ></p>
       <footer className="flex justify-end mt-auto">

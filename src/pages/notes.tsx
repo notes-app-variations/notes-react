@@ -26,10 +26,10 @@ const Notes = (props: Props) => {
 
   function fetchData() {
     fetchNotes()
-      .then(res => {
+      .then((res) => {
         setNotes([...res])
       })
-      .catch(e => {
+      .catch((e) => {
         setAlert(e.toString())
       })
   }
@@ -42,14 +42,14 @@ const Notes = (props: Props) => {
 
   const filteredNotes = () => {
     if (category === "All") return notes
-    else return notes.filter(n => n.category === category)
+    else return notes.filter((n) => n.category === category)
   }
 
   const bulkDelete = async (e: React.MouseEvent) => {
     e.preventDefault()
     try {
       setAlert("")
-      await Promise.all(selectedNoteIds.map(async x => await deleteNote(x)))
+      await Promise.all(selectedNoteIds.map(async (x) => await deleteNote(x)))
       //this.notes = await fetchNotes()
     } catch (e) {
       setAlert(e)
@@ -81,13 +81,17 @@ const Notes = (props: Props) => {
             <span className="block sm:inline">{alert}</span>
           </div>
         )}
-        {filteredNotes().map(x => (
+        {filteredNotes().map((x) => (
           <div key={x._id}>
             <label className="text-gray-500 font-bold flex items-center">
               <input className="leading-tight" type="checkbox" />
               <span className="text-sm">Select for delete</span>
             </label>
-            <NoteCard note={x} />
+            <Link
+              to={`/note?_id=${x._id}&title=${x.title}&body=${x.body}&uid=${x.uid}&category=${x.category}`}
+            >
+              <NoteCard note={x} />
+            </Link>
           </div>
         ))}
       </section>

@@ -34,11 +34,11 @@ h3 {
 }
 
 ul {
-  @apply list-disc;
+  @apply list-disc pl-4;
 }
 
 ol {
-  @apply list-decimal;
+  @apply list-decimal pl-4;
 }
 
 @tailwind components;

@@ -15,7 +15,7 @@ export interface Note {
   title: string
   body: string
   category: string
-  userId: string
-  _id: string
-  createdAt: string
+  userId?: string
+  _id?: string
+  createdAt?: string
 }

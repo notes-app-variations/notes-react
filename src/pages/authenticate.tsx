@@ -1,47 +1,39 @@
-import React from "react"
-import { Switch, Route, Link, useRouteMatch } from "react-router-dom"
+import React, { useState } from "react"
 import Login from "../components/Login"
 import Register from "../components/Register"
 
 interface Props {}
 
 const Authenticate = (props: Props) => {
-  let { path, url } = useRouteMatch()
-  console.log(`${url}register`)
-  console.log(`${path}register`)
+  const [authToggle, setAuthToggle] = useState(false)
+
+  const toggleAuth = (value: boolean, e: React.FormEvent) => {
+    e.preventDefault()
+    setAuthToggle(value)
+  }
   return (
     <div className="h-full flex justify-center items-center">
       <div className="h-64">
         <ul className="flex border-b list-none">
           <li className="mr-1 w-1/2">
-            <Link
-              to={`${url}`}
+            <button
               className="bg-orange-100 w-full inline-block py-2 px-4 text-gray-500 font-semibold focus:outline-none"
+              onClick={(e) => toggleAuth(false, e)}
             >
               Login
-            </Link>
+            </button>
           </li>
           <li className="w-1/2">
-            <Link
-              to={`${url}register`}
+            <button
               className="bg-orange-100 w-full inline-block py-2 px-4 text-gray-500 font-semibold focus:outline-none"
+              onClick={(e) => toggleAuth(true, e)}
             >
               Register
-            </Link>
+            </button>
           </li>
         </ul>
         <div className="p-6 bg-orange-200 border-l border-r border-b shadow">
-          <Switch>
-            <Route
-              exact
-              path={`${path}`}
-              render={props => <Login {...props} />}
-            ></Route>
-            <Route
-              path={`${path}register`}
-              render={props => <Register {...props} />}
-            ></Route>
-          </Switch>
+          {authToggle ? <Register /> : <Login />}
         </div>
       </div>
     </div>

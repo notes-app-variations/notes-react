@@ -1,27 +1,78 @@
-import React from "react"
+import React, { ReactPropTypes } from "react"
 import { useState } from "react"
+import queryString from "query-string"
+import marked from "marked"
+import { RouteComponentProps } from "react-router"
+import { useHistory } from "react-router-dom"
+import { postNote, editNote, deleteNote } from "../api/actions"
 import CategorySelector from "../components/CategorySelector"
 
-interface Props {}
+interface Props extends RouteComponentProps {}
 
 const Note = (props: Props) => {
-  const [title, setTitle] = useState("")
-  const [body, setBody] = useState("")
-  const [category, setCategory] = useState("")
+  const parsed = queryString.parse(props.location.search)
+  const [_id, setId] = useState(parsed._id?.toString() || "")
+  const [title, setTitle] = useState(parsed.title?.toString() || "")
+  const [body, setBody] = useState(parsed.body?.toString() || "")
+  const [category, setCategory] = useState(parsed.category?.toString() || "")
+  const [uid, setUid] = useState(parsed.uid?.toString() || "")
   const [alert, setAlert] = useState("")
+  const history = useHistory()
 
-  const saveNote = () => {}
-  const onEdit = () => {}
-  const updateBody = () => {}
-  const deleteNote = () => {}
+  const compileMarkdown = () => {
+    return marked(body)
+  }
+  const onEditTitle = (e: any) => {
+    setTitle(e.target.value)
+  }
+  const updateBody = (e: any) => {
+    setBody(e.target.value)
+  }
+  const saveNote = (e: any) => {
+    e.preventDefault()
+    if (_id) {
+      try {
+        editNote(_id, {
+          title: title,
+          body: body,
+          category: category,
+        })
+        history.push("/notes")
+      } catch (e) {
+        setAlert(e)
+      }
+    } else {
+      try {
+        postNote({
+          title: title,
+          body: body,
+          category: category,
+        })
+        history.push("/notes")
+      } catch (e) {
+        setAlert(e)
+      }
+    }
+  }
+  const deleteNote = (e: any) => {
+    e.preventDefault()
+    try {
+      deleteNote(_id)
+      history.push("/notes")
+    } catch (e) {
+      setAlert(e)
+    }
+  }
 
   return (
     <div className="h-full  w-5/6 lg:w-2/5 m-auto">
       <form onSubmit={saveNote} className="flex flex-col">
         <div className="note-header flex items-end my-5">
-          <h2 onBlur={onEdit} className=" w-3/5 mr-4">
-            {title}
-          </h2>
+          <input
+            value={title}
+            onChange={(e) => onEditTitle(e)}
+            className=" w-3/5 mr-4"
+          ></input>
           <CategorySelector />
         </div>
         <p className="text-xs italic ml-auto text-gray-500">
@@ -34,13 +85,14 @@ const Note = (props: Props) => {
           </a>
         </p>
         <textarea
-          onInput={updateBody}
+          onChange={(e) => updateBody(e)}
+          value={body}
           className="border w-full h-56"
         ></textarea>
         <div className="flex my-5">
           <button
             className="btn-main bg-red-700 hover:bg-red-500"
-            onClick={deleteNote}
+            onClick={(e) => deleteNote(e)}
           >
             Delete
           </button>
@@ -48,18 +100,20 @@ const Note = (props: Props) => {
             Save
           </button>
         </div>
-        <div
-          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
-          <span className="block sm:inline">{alert}</span>
-        </div>
+        {alert !== "" && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <span className="block sm:inline">{alert}</span>
+          </div>
+        )}
       </form>
       <section className="my-6 bg-gray-200 text-gray-600 p-4 rounded-sm">
         <h3>Preview</h3>
         <hr />
 
-        <div v-html="compiledMarkdown"></div>
+        <div dangerouslySetInnerHTML={{ __html: compileMarkdown() }}></div>
       </section>
     </div>
   )
